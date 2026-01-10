@@ -1,8 +1,6 @@
 import './style.css'
 import { createHeader } from './dependencies/header.ts'
 import { createCardContainer } from './dependencies/card-container.ts'
-// import typescriptLogo from './typescript.svg'
-// import viteLogo from '/vite.svg'
 
 const app = document.getElementById('app');
 if (!app) {

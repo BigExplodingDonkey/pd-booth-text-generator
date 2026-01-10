@@ -2,12 +2,18 @@
 :root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.5;
-  font-size: 16px; /* 1rem = 16px baseline */
+  font-size: 16px;
 
   color: #0f172a;
   background-color: #a3c4f3;
+}
 
-  text-rendering: optimizeLegibility;
+/* ---------------- INCLUDE PADDING IN WIDTHS ---------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 /* ---------------- LINKS ---------------- */
@@ -20,19 +26,20 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ---------------- PAGE ---------------- */
+/* ---------------- PAGE LAYOUT ---------------- */
 body {
   margin: 0;
-  min-height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: center;  /* horizontal centering */
+  width: 100vw;             /* ensure body fills the viewport width */
 }
 
 #app {
-  width: 90%;               /* scales with viewport */
-  max-width: 60rem;         /* caps width on large screens */
+  width: 90%;
+  max-width: 60rem;
   padding: 2rem;
   text-align: center;
+  box-sizing: border-box;   /* include padding in width calculation */
 }
 
 /* ---------------- NAVBAR ---------------- */
@@ -42,198 +49,144 @@ header nav ul {
   padding: 0;
 
   display: flex;
-  justify-content: center; /* center everything horizontally */
+  justify-content: center;
   align-items: center;
-  gap: 1.5rem;             /* spacing between title and link */
-  flex-wrap: wrap;          /* wrap on very narrow screens */
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
-/* ---------------- NAVBAR TEXT ---------------- */
 header nav ul li {
-  font-size: 1.2rem; /* increase from default ~1rem */
-  font-weight: 400;   /* slightly bolder for emphasis */
-  color: #0f172a;     /* keeps your dark text for contrast */
+  font-size: 1.2rem;
+  color: #0f172a;
 }
 
-/* ---------------- CARD CONTAINER ---------------- */
+/* ---------------- WRAPPER (Unified Card) ---------------- */
 #card-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem; /* default gap between normal cards */
-}
-
-/* Remove gap between last normal card and end-card */
-#card-container > .card:last-of-type {
-  margin-bottom: 0; /* ensure last card has no bottom margin */
-}
-
-#card-container > #end-card {
-  margin-top: -2rem; /* pull up end-card to visually touch last card */
-}
-
-/* ---------------- CARDS ---------------- */
-.card,
-#end-card {
   background-color: #c0d9fa;
-  border: 0.0625rem solid #7faedc; /* 1px → 0.0625rem */
-  border-radius: 1rem;              /* 16px → 1rem */
-  padding: 1.75rem;
+  border: 1px solid #7faedc;
+  border-radius: 1.25rem;
+  padding: 2rem;
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 2.5rem;
+
+  max-width: 60rem;   /* wrapper width limit */
+  width: 100%;        /* fills available space */
+  box-shadow: 0 0.5rem 1.25rem rgba(15, 23, 42, 0.12);
+}
+
+/* ---------------- WRAPPER (Unified Card) ---------------- */
+#card-container {
+  background-color: #c0d9fa;
+  border: 1px solid #7faedc;
+  border-radius: 1.25rem;
+  padding: 3rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  max-width: 60rem;   /* wrapper width limit */
+  width: 100%;        /* fills available space */
+  box-shadow: 0 0.5rem 1.25rem rgba(15, 23, 42, 0.12);
+}
+
+/* ---------------- CARD SECTIONS ---------------- */
+#card-container > .card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;       /* fill wrapper width */
   gap: 1rem;
 
-  box-shadow: 0 0.5rem 1rem rgba(15, 23, 42, 0.1); /* 8px 16px → rem */
+  background-color: inherit;
+  border-radius: 0;
+  box-shadow: none;
+
+  align-items: center; /* CENTER CHILDREN HORIZONTALLY */
 }
 
-/* ---------------- TITLES ---------------- */
-.card h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #0f172a;
-  text-align: center;
+/* ---------------- DIVIDERS ---------------- */
+
+.divider {
+  width: 100%;             /* span the full width of its parent */
+  height: 1px;             /* visible thin line */
+  background-color: #7faedc; /* matches card border, or choose any color */
+  margin: 1rem 0;          /* optional spacing above/below */
+}
+
+/* ---------------- Labeled Inputs ---------------- */
+.labeled-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;       /* fill the card horizontally */
+}
+
+.labeled-input label {
+  min-width: 6rem;   /* give labels a consistent width */
+  text-align: right;
+}
+
+.labeled-input select,
+.labeled-input input {
+  flex: 1;           /* take remaining space */
 }
 
 /* ---------------- TEXTAREA ---------------- */
-.card textarea {
-  width: 100%;
-  max-width: 37.5rem; /* 600px → 37.5rem */
-  min-height: 7.5rem; /* 120px → 7.5rem */
+#card-container textarea {
+  display: block;             /* ensures proper block behavior */
+  width: 100%;                /* fills the card width */
+  box-sizing: border-box;     /* include padding & border in width calculation */
+  padding: 0.75rem;           /* keep your original padding */
+  min-height: 7.5rem;         /* keep your original height */
+  
+  background-color: #b2d0f7;  /* original background */
+  border: 1px solid #7faedc;  /* original border */
+  border-radius: 0.75rem;      /* original rounded corners */
+  
+  font-family: inherit;        /* keep original font */
+  font-size: 1rem;             /* keep font size */
+  color: #0f172a;              /* keep text color */
 
-  padding: 0.75rem;
-  resize: vertical;
-
-  font-family: inherit;
-  font-size: 1rem;
-  color: #0f172a;
-
-  background-color: #b2d0f7;
-  border: 0.0625rem solid #7faedc;
-  border-radius: 0.75rem;
+  resize: vertical;            /* keep vertical resizing */
+  margin: 0;                   /* remove any centering margin from parent text-align */
 }
 
-/* ---------------- TEXTAREA FOCUS ---------------- */
-.card textarea:focus {
-  outline: none; /* remove default browser outline */
-  border-color: #5f8fcf; /* slightly darker than original #7faedc */
-  background-color: #aec9f5; /* slightly darker/lighter shade to indicate focus */
-}
-
-/* ---------------- TEXTAREA PLACEHOLDER ---------------- */
-.card textarea::placeholder,
-#popup-box textarea::placeholder {
-  color: #5a6f91; /* soft blue-gray, easy on the eyes */
-  opacity: 1;     /* browsers sometimes make placeholder semi-transparent by default */
-}
-
-/* ---------------- COLLAPSIBLE BUTTON ---------------- */
-.collapsible {
-  background-color: #4f7fbf;   /* darker, clearly a button */
-  color: #fff;
-  font-weight: 500;
-  border: none;
-  border-radius: 0.75rem;
-  padding: 0.65em 1.2em;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
-  max-width: 600px;
+/* Keep section headings centered */
+#card-container h2 {
   text-align: center;
-}
-
-.collapsible:hover {
-  background-color: #3e6bb3;
-}
-
-/* ---------------- COLLAPSIBLE CONTENT ---------------- */
-.collapsible-content {
-  display: none;
-  width: 100%;
-  max-width: 37.5rem;
-  padding: 0;             /* remove extra spacing */
-  border-radius: 0;       /* no rounding */
-  background: none;       /* remove background */
-  border: none;           /* remove border */
-  box-shadow: none;       /* remove shadow */
-}
-
-.collapsible-content.active {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;           /* keep small gap between buttons */
-}
-
-/* ---------------- STYLE BUTTONS ---------------- */
-.styles {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-/* ---------------- CARD BUTTONS ---------------- */
-.card-btns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-/* ---------------- END CARD ---------------- */
-#end-card > * {
-  align-self: center;
-}
-
-/* ---------------- BUTTONS ---------------- */
-button {
-  padding: 0.65em 1.3em;
-  font-size: 0.95rem;
-  font-weight: 500;
-  font-family: inherit;
-
-  border-radius: 0.875rem; /* 14px → rem */
-  border: 0.0625rem solid #7faedc;
-  background-color: #c0d9fa;
+  margin: 0 0 0.75rem 0;
+  font-size: 1.35rem;
   color: #0f172a;
-
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-button:hover {
-  background-color: #b2d0f7;
-  border-color: #4f6cff;
-}
-
-button:focus-visible {
-  outline: 0.1875rem solid rgba(79, 108, 255, 0.5); /* 3px → rem */
 }
 
 /* ---------------- GENERATE BUTTON ---------------- */
 #generate {
-  background-color: #5c8eff;   /* brighter, vivid blue */
-  color: #fff;                 /* white text for contrast */
+  align-self: center; /* center inside the card */
+  background-color: #5c8eff;
+  color: #fff;
   font-weight: 600;
   font-size: 1.1rem;
-  padding: 0.75em 1.5em;
+
+  padding: 0.85em 1.75em;
   border-radius: 1rem;
   border: none;
-  box-shadow: 0 0.4rem 0.8rem rgba(92, 142, 255, 0.3); /* subtle glow for depth */
+
+  box-shadow: 0 0.4rem 0.8rem rgba(92, 142, 255, 0.3);
   cursor: pointer;
+
   transition: background-color 0.2s, transform 0.1s;
 }
 
-/* Hover / active effects */
 #generate:hover {
-  background-color: #4b7ee6; /* slightly darker shade on hover */
+  background-color: #4b7ee6;
   transform: translateY(-2px);
 }
 
 #generate:active {
   transform: translateY(0);
 }
-
 
 /* ---------------- MEDIA QUERIES ---------------- */
 @media (max-width: 480px) {
@@ -242,8 +195,7 @@ button:focus-visible {
     padding: 1rem;
   }
 
-  .card textarea,
-  .collapsible-content {
+  #card-container textarea {
     max-width: 100%;
   }
 }
