@@ -22,9 +22,6 @@ a {
   color: #4f6cff;
   text-decoration: none;
 }
-a:hover {
-  text-decoration: underline;
-}
 
 /* ---------------- PAGE LAYOUT ---------------- */
 body {
@@ -56,8 +53,24 @@ header nav ul {
 }
 
 header nav ul li {
-  font-size: 1.2rem;
-  color: #0f172a;
+    display: flex;
+    align-items: center; /* vertically center everything inside li */
+    font-size: 1.2rem;
+    color: #0f172a;
+}
+
+li a {
+    display: inline-flex;
+    align-items: center; /* vertically centers all children */
+    gap: 0.5rem;         /* space between icon and text */
+    line-height: 1;      /* ensure no extra space from text baseline */
+}
+
+.nav-icon {
+    width: 1.5rem;          /* size of the icon */
+    height: 1.5rem;
+    flex-shrink: 0;
+    vertical-align: middle; /* ensures proper vertical alignment */
 }
 
 /* ---------------- WRAPPER (Unified Card) ---------------- */

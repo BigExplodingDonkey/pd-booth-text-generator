@@ -4,7 +4,9 @@ export function createHeader(): HTMLElement {
     const ul = document.createElement("ul");
     ul.innerHTML = `
     <li><b>PD Booth Text Generator</b></li>
-    <li><a href="https://www.discord.gg/VgCjM8agKC">Discord Server</a></li>
+    <li><a href="https://www.discord.gg/VgCjM8agKC">
+        <img src="./public/DiscordIcon.png" alt="Discord" class="nav-icon"> Discord Server
+    </a></li>
     `;
 
     // Build nav header
