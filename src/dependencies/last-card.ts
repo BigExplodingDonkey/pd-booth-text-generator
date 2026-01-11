@@ -42,6 +42,7 @@ function generateGradient(startHex: string, endHex: string, steps: number): stri
     return gradient;
 }
 
+// Add gradients to the text first
 function addGradient(
         text: string, font: boolean, fontColor1: string, fontColor2: string,
         highlight: boolean, highlightColor1: string, highlightColor2: string, highlightTransparency: string,
