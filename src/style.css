@@ -130,7 +130,28 @@ header nav ul li {
 
 .labeled-input select,
 .labeled-input input {
-  flex: 1;           /* take remaining space */
+  flex: 1;                     /* take remaining space */
+  padding: 0.5rem 0.75rem;     /* more comfortable padding */
+  font-size: 1rem;             /* consistent with textarea */
+  border: 1px solid #7faedc;   /* match your card borders */
+  border-radius: 0.5rem;       /* rounded corners */
+  background-color: #b2d0f7;   /* match textarea background */
+  color: #0f172a;              /* text color */
+  appearance: none;            /* removes default arrows on some browsers */
+  -moz-appearance: none;       /* Firefox */
+  -webkit-appearance: none;    /* Safari/Chrome */
+  text-align: center;          /* center the text/value */
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.labeled-input select:hover,
+.labeled-input input:hover,
+.labeled-input select:focus,
+.labeled-input input:focus {
+  border-color: #5c8eff;
+  box-shadow: 0 0 0 1px rgba(92, 142, 255, 0.3);
+  outline: none;
 }
 
 /* ---------------- TEXTAREA ---------------- */
