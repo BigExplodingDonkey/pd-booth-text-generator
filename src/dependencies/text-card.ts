@@ -7,6 +7,7 @@ export function createTextCard(): HTMLDivElement {
     label.textContent = "Booth Text";
 
     const textBox = document.createElement("textarea");
+    textBox.id = "booth-text";
     textBox.placeholder = "Enter your booth text here...";
     textBox.style.resize = 'none';
 

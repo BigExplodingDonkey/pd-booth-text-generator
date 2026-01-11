@@ -1,7 +1,8 @@
-export function createOption(value: string, textContent: string): HTMLElement {
+export function createOption(value: string, textContent: string, selected: boolean = false): HTMLElement {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = textContent;
+    option.selected = selected;
 
     return option;
 }

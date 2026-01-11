@@ -9,8 +9,6 @@ export function createLabeledInput(labelText: string, input: HTMLElement): HTMLD
 
     if (input.id) {
         label.htmlFor = input.id;
-    } else {
-        label.htmlFor = input.id = `input-${crypto.randomUUID()}`;
     }
 
     row.append(label, input);

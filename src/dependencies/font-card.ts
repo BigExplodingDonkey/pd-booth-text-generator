@@ -7,7 +7,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
         let colorInputDiv;
         let colorInput1Div;
         let colorInput2Div;
-        let sizeCheckboxDiv;
+        let sizeCheckDiv;
 
         switch(dropdown.value) {
             case "none":
@@ -29,7 +29,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 colorInput1Div?.remove();
                 colorInput2Div?.remove();
 
-                sizeCheckboxDiv = card?.querySelector("#size-checkbox")?.parentElement;
+                sizeCheckDiv = card?.querySelector("#size-check-dropdown")?.parentElement;
 
                 // Create color input
                 const colorInput = document.createElement("input");
@@ -38,8 +38,8 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const labeledColorInput = createLabeledInput("Color", colorInput);
 
                 // Place it in proper spot
-                if (sizeCheckboxDiv) {
-                    card?.insertBefore(labeledColorInput, sizeCheckboxDiv);
+                if (sizeCheckDiv) {
+                    card?.insertBefore(labeledColorInput, sizeCheckDiv);
                 }
 
                 break;
@@ -49,7 +49,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 // Remove color option if it exists
                 colorInputDiv?.remove();
 
-                sizeCheckboxDiv = card?.querySelector("#size-checkbox")?.parentElement;
+                sizeCheckDiv = card?.querySelector("#size-check-dropdown")?.parentElement;
 
                 // Create color input 1
                 const colorInput1 = document.createElement("input");
@@ -64,9 +64,9 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const labeledColorInput2 = createLabeledInput("Color 2", colorInput2);
 
                 // Place them in proper spots
-                if (sizeCheckboxDiv) {
-                    card?.insertBefore(labeledColorInput1, sizeCheckboxDiv);
-                    card?.insertBefore(labeledColorInput2, sizeCheckboxDiv);
+                if (sizeCheckDiv) {
+                    card?.insertBefore(labeledColorInput1, sizeCheckDiv);
+                    card?.insertBefore(labeledColorInput2, sizeCheckDiv);
                 }
 
                 break;
@@ -74,7 +74,71 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 // Do nothing
         };
     }
-    dropdown.addEventListener('change', () => toggleColorElements())
+    dropdown.addEventListener('change', () => toggleColorElements());
+}
+
+function setupSizeDropdown(dropdown: HTMLSelectElement): void {
+    const toggleSizeElement = () => {
+        const card = dropdown.closest(".card");
+        let sizeInputDiv;
+        let familyInputDiv;
+
+        switch(dropdown.value) {
+            case "no":
+                sizeInputDiv = card?.querySelector("#size")?.parentElement;
+
+                // Remove size input if it exists
+                sizeInputDiv?.remove();
+
+                break;
+            case "yes":
+                familyInputDiv = card?.querySelector("#family-dropdown")?.parentElement;
+
+                // Create size input
+                const sizeInput = document.createElement("input");
+                sizeInput.type = "number";
+                sizeInput.id = "size";
+                sizeInput.style.width = "3rem";
+                sizeInput.min = "0";
+                sizeInput.defaultValue = "30";
+                setupNumInput(sizeInput);
+                const labeledSizeInput = createLabeledInput("Size", sizeInput);
+
+                // Place it in proper spot
+                if (familyInputDiv) {
+                    card?.insertBefore(labeledSizeInput, familyInputDiv);
+                }
+
+                break;
+            default:
+                // Do nothing
+        };
+    }
+    dropdown.addEventListener('change', () => toggleSizeElement());
+}
+
+function setupNumInput(input: HTMLInputElement): void {
+    const defaultValue = input.defaultValue;
+    const ensureCorrectValue = () => {
+        const value = parseFloat(input.value);
+
+        // If invalid, set to default value
+        if (isNaN(value)) {
+            input.value = defaultValue;
+            return;
+        }
+
+        // Get min and max
+        const min = input.min ? parseFloat(input.min) : -Infinity;
+        const max = input.max ? parseFloat(input.max) : Infinity;
+
+        // If value isn't between min and max, set to default value
+        if (value < min || value > max) {
+            input.value = defaultValue;
+            return;
+        }
+    }
+    input.addEventListener('change', () => ensureCorrectValue());
 }
 
 export function createFontCard(): HTMLDivElement {
@@ -87,37 +151,119 @@ export function createFontCard(): HTMLDivElement {
     label.textContent = "Font Style";
 
     // Create color type dropdown
-    const options: HTMLElement[] = [
-        createOption("none", "None"),
+    const colorTypeOptions: HTMLElement[] = [
+        createOption("none", "None", true),
         createOption("color", "Solid"),
         createOption("gradient", "Gradient")
     ]
-    const colorTypeDropdown = createDropdown("color-type-dropdown", options);
-    setupColorTypeDropdown(colorTypeDropdown);
+    const colorTypeDropdown = createDropdown("color-type-dropdown", colorTypeOptions);
     const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown);
 
     // Create size checkbox
-    const sizeCheckbox = document.createElement("input");
-    sizeCheckbox.type = "checkbox";
-    sizeCheckbox.id = "size-checkbox";
-    sizeCheckbox.checked = false;
-    const labeledSizeCheckbox = createLabeledInput("Size?", sizeCheckbox);
+    const sizeCheckOptions: HTMLElement[] = [
+        createOption("no", "No"),
+        createOption("yes", "Yes")
+    ]
+    const sizeCheckDropdown = createDropdown("size-check-dropdown", sizeCheckOptions);
+    const labeledSizeCheckbox = createLabeledInput("Use Size?", sizeCheckDropdown);
 
-    // Create size input
-    // const sizeInput = document.createElement("input");
-    // sizeInput.type = "number";
-    // sizeInput.id = "transparency";
-    // sizeInput.style.width = "3rem";
-    // sizeInput.min = "0";
-    // sizeInput.step = "0.1";
-    // sizeInput.max = "0.9";
-    // sizeInput.defaultValue = "0";
-    // const labeledSizeInput = createLabeledInput("Size", sizeInput);
+    // Create family dropdown
+    const familyOptions: HTMLElement[] = [
+        createOption("None", "None", true),
+        createOption("Legacy", "Legacy"),
+        createOption("Arial", "Arial"),
+        createOption("ArialBold", "ArialBold"),
+        createOption("SourceSans", "SourceSans"),
+        createOption("SourceSansBold", "SourceSansBold"),
+        createOption("SourceSansLight", "SourceSansLight"),
+        createOption("SourceSansItalic", "SourceSansItalic"),
+        createOption("Bodoni", "Bodoni"),
+        createOption("Garamond", "Garamond"),
+        createOption("Cartoon", "Cartoon"),
+        createOption("Code", "Code"),
+        createOption("Highway", "Highway"),
+        createOption("SciFi", "SciFi"),
+        createOption("Arcade", "Arcade"),
+        createOption("Fantasy", "Fantasy"),
+        createOption("Antique", "Antique"),
+        createOption("SourceSansSemibold", "SourceSansSemibold"),
+        createOption("Gotham", "Gotham"),
+        createOption("GothamMedium", "GothamMedium"),
+        createOption("GothamBold", "GothamBold"),
+        createOption("GothamBlack", "GothamBlack"),
+        createOption("AmaticSC", "AmaticSC"),
+        createOption("Bangers", "Bangers"),
+        createOption("Creepster", "Creepster"),
+        createOption("DenkOne", "DenkOne"),
+        createOption("Fondamento", "Fondamento"),
+        createOption("FredokaOne", "FredokaOne"),
+        createOption("GrenzeGotisch", "GrenzeGotisch"),
+        createOption("IndieFlower", "IndieFlower"),
+        createOption("JosefinSans", "JosefinSans"),
+        createOption("Jura", "Jura"),
+        createOption("Kalam", "Kalam"),
+        createOption("LuckiestGuy", "LuckiestGuy"),
+        createOption("Merriweather", "Merriweather"),
+        createOption("Michroma", "Michroma"),
+        createOption("Nunito", "Nunito"),
+        createOption("Oswald", "Oswald"),
+        createOption("PatrickHand", "PatrickHand"),
+        createOption("PermanentMarker", "PermanentMarker"),
+        createOption("Roboto", "Roboto"),
+        createOption("RobotoCondensed", "RobotoCondensed"),
+        createOption("RobotoMono", "RobotoMono"),
+        createOption("Sarpanch", "Sarpanch"),
+        createOption("SpecialElite", "SpecialElite"),
+        createOption("TitilliumWeb", "TitilliumWeb"),
+        createOption("Ubuntu", "Ubuntu"),
+        createOption("BuilderSans", "BuilderSans"),
+        createOption("BuilderSansMedium", "BuilderSansMedium"),
+        createOption("BuilderSansBold", "BuilderSansBold"),
+        createOption("BuilderSansExtraBold", "BuilderSansExtraBold"),
+        createOption("Arimo", "Arimo"),
+        createOption("ArimoBold", "ArimoBold")
+    ];
+    const familyDropdown = createDropdown("family-dropdown", familyOptions);
+    const labeledFamilyDropdown = createLabeledInput("Family", familyDropdown);
 
-    // Add proper contents to the card
+    // Create transparency input
+    const transparencyInput = document.createElement("input");
+    transparencyInput.type = "number";
+    transparencyInput.id = "transparency";
+    transparencyInput.style.width = "3rem";
+    transparencyInput.min = "0";
+    transparencyInput.step = "0.1";
+    transparencyInput.max = "0.9";
+    transparencyInput.defaultValue = "0";
+    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput);
+
+    // Create weight dropdown
+    const weightOptions: HTMLElement[] = [
+        createOption("Thin", "Thin"),
+        createOption("ExtraLight", "ExtraLight"),
+        createOption("Light", "Light"),
+        createOption("Regular", "Regular", true),
+        createOption("Medium", "Medium"),
+        createOption("SemiBold", "SemiBold"),
+        createOption("Bold", "Bold"),
+        createOption("ExtraBold", "ExtraBold"),
+        createOption("Heavy", "Heavy")
+    ];
+    const weightDropdown = createDropdown("weight-dropdown", weightOptions);
+    const labeledWeightDropdown = createLabeledInput("Weight", weightDropdown);
+
+    // Add contents to the card
     card.appendChild(label);
     card.appendChild(labeledColorTypeDropdown);
     card.appendChild(labeledSizeCheckbox);
+    card.appendChild(labeledFamilyDropdown);
+    card.appendChild(labeledWeightDropdown);
+    card.appendChild(labeledTransparencyInput);
+
+    // Setup input functionality
+    setupColorTypeDropdown(colorTypeDropdown);
+    setupSizeDropdown(sizeCheckDropdown);
+    setupNumInput(transparencyInput);
 
     return card;
 }

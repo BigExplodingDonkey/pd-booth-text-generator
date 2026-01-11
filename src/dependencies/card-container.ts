@@ -2,27 +2,39 @@ import { createTextCard } from './text-card.ts'
 import { createDivider } from './divider.ts';
 import { createHighlightCard } from './highlight-card.ts'
 import { createFontCard } from './font-card.ts'
-import { createGenerateCard } from './generate-card.ts'
+import { createStrokeCard } from './stroke-card.ts'
+import { createMiscellaneousCard } from './miscellaneous-card.ts'
+import { createLastCard } from './last-card.ts'
 
 export function createCardContainer(): HTMLElement {
     const cardContainer = document.createElement("div");
-    cardContainer.id = "card-container"
+    cardContainer.id = "card-container";
 
     // Create different cards
     const textCard = createTextCard();
     const divider1 = createDivider();
-    const highlightCard = createHighlightCard();
-    const divider2 = createDivider();
     const fontCard = createFontCard();
-    const genCard = createGenerateCard();
+    const divider2 = createDivider();
+    const highlightCard = createHighlightCard();
+    const divider3 = createDivider();
+    const strokeCard = createStrokeCard();
+    const divider4 = createDivider();
+    const miscellaneousCard = createMiscellaneousCard();
+    const divider5 = createDivider();
+    const lastCard = createLastCard();
 
     // Add the cards to the card wrapper
     cardContainer.appendChild(textCard);
     cardContainer.appendChild(divider1);
-    cardContainer.appendChild(highlightCard);
-    cardContainer.appendChild(divider2);
     cardContainer.appendChild(fontCard);
-    cardContainer.appendChild(genCard);
+    cardContainer.appendChild(divider2);
+    cardContainer.appendChild(highlightCard);
+    cardContainer.appendChild(divider3);
+    cardContainer.appendChild(strokeCard);
+    cardContainer.appendChild(divider4);
+    cardContainer.appendChild(miscellaneousCard);
+    cardContainer.appendChild(divider5);
+    cardContainer.appendChild(lastCard);
 
     return cardContainer;
 }

@@ -7,7 +7,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
         let colorInputDiv;
         let colorInput1Div;
         let colorInput2Div;
-        let transparencyInputDiv;
+        let thicknessDiv;
 
         switch(dropdown.value) {
             case "none":
@@ -29,7 +29,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 colorInput1Div?.remove();
                 colorInput2Div?.remove();
 
-                transparencyInputDiv = card?.querySelector("#transparency")?.parentElement;
+                thicknessDiv = card?.querySelector("#thickness")?.parentElement;
 
                 // Create color input
                 const colorInput = document.createElement("input");
@@ -38,8 +38,8 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const labeledColorInput = createLabeledInput("Color", colorInput);
 
                 // Place it in proper spot
-                if (transparencyInputDiv) {
-                    card?.insertBefore(labeledColorInput, transparencyInputDiv);
+                if (thicknessDiv) {
+                    card?.insertBefore(labeledColorInput, thicknessDiv);
                 }
 
                 break;
@@ -49,7 +49,7 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 // Remove color option if it exists
                 colorInputDiv?.remove();
 
-                transparencyInputDiv = card?.querySelector("#transparency")?.parentElement;
+                thicknessDiv = card?.querySelector("#thickness")?.parentElement;
 
                 // Create color input 1
                 const colorInput1 = document.createElement("input");
@@ -64,9 +64,9 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const labeledColorInput2 = createLabeledInput("Color 2", colorInput2);
 
                 // Place them in proper spots
-                if (transparencyInputDiv) {
-                    card?.insertBefore(labeledColorInput1, transparencyInputDiv);
-                    card?.insertBefore(labeledColorInput2, transparencyInputDiv);
+                if (thicknessDiv) {
+                    card?.insertBefore(labeledColorInput1, thicknessDiv);
+                    card?.insertBefore(labeledColorInput2, thicknessDiv);
                 }
 
                 break;
@@ -101,23 +101,33 @@ function setupNumInput(input: HTMLInputElement): void {
     input.addEventListener('change', () => ensureCorrectValue());
 }
 
-export function createHighlightCard(): HTMLDivElement {
+export function createStrokeCard(): HTMLDivElement {
     const card = document.createElement("div");
     card.className = "card"
-    card.id = "highlight-card"
+    card.id = "stroke-card"
 
     // Create label and textbox
     const label = document.createElement("h2");
-    label.textContent = "Highlight Style";
+    label.textContent = "Stroke (Outline) Style";
 
     // Create color type dropdown
-    const options: HTMLElement[] = [
-        createOption("none", "None"),
+    const colorTypeOptions: HTMLElement[] = [
+        createOption("none", "None", true),
         createOption("color", "Solid"),
         createOption("gradient", "Gradient")
     ]
-    const colorTypeDropdown = createDropdown("color-type-dropdown", options);
+    const colorTypeDropdown = createDropdown("color-type-dropdown", colorTypeOptions);
     const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown);
+
+    // Create size input
+    const thicknessInput = document.createElement("input");
+    thicknessInput.type = "number";
+    thicknessInput.id = "thickness";
+    thicknessInput.style.width = "3rem";
+    thicknessInput.min = "1";
+    thicknessInput.max = "30";
+    thicknessInput.defaultValue = "3";
+    const labeledThicknessInput = createLabeledInput("Thickness", thicknessInput);
 
     // Create transparency input
     const transparencyInput = document.createElement("input");
@@ -130,14 +140,36 @@ export function createHighlightCard(): HTMLDivElement {
     transparencyInput.defaultValue = "0";
     const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput);
 
-    // Add proper contents to the card
+    // Create joins dropdown
+    const joinsOptions: HTMLElement[] = [
+        createOption("miter", "Miter (Default)", true),
+        createOption("round", "Round"),
+        createOption("bevel", "Bevel")
+    ];
+    const joinsDropdown = createDropdown("joins-dropdown", joinsOptions);
+    const labeledJoinsDropdown = createLabeledInput("Joins", joinsDropdown);
+
+    // Create sizing dropdown
+    const sizingOptions: HTMLElement[] = [
+        createOption("fixed", "Fixed (Default)", true),
+        createOption("scaled", "Scaled")
+    ];
+    const sizingDropdown = createDropdown("sizing-dropdown", sizingOptions);
+    const labeledSizingDropdown = createLabeledInput("Sizing", sizingDropdown);
+
+    // Add contents to the card
     card.appendChild(label);
     card.appendChild(labeledColorTypeDropdown);
+    card.appendChild(labeledThicknessInput);
     card.appendChild(labeledTransparencyInput);
+    card.appendChild(labeledJoinsDropdown);
+    card.appendChild(labeledSizingDropdown);
 
     // Setup input functionality
-    setupColorTypeDropdown(colorTypeDropdown);
+    setupNumInput(thicknessInput);
+    setupNumInput(thicknessInput);
     setupNumInput(transparencyInput);
+    setupColorTypeDropdown(colorTypeDropdown);
 
     return card;
 }
