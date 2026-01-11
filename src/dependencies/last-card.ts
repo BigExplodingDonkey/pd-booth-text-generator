@@ -1,7 +1,93 @@
 import { createCardContainer } from './card-container.ts'
 
-function addGradient(text: string, highlight: boolean, font: boolean, stroke: boolean): string {
-    return text;
+// Convert hex to rgb value
+function hexToRGB(hex: string): { r: number, g: number, b: number } {
+    const pureHex = hex.replace("#", "");
+    return {
+        r: parseInt(pureHex.substring(0,2), 16),
+        g: parseInt(pureHex.substring(2,4), 16),
+        b: parseInt(pureHex.substring(4,6), 16)
+    };
+}
+
+// Convert rgb to hex value
+function rgbToHex(r: number, g: number, b: number): string {
+    return (
+        "#" + [r, g, b].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? "0" + hex : hex;
+        }).join("")
+    );
+}
+
+// Generate steps # of colors from startHex to endHex colors
+function generateGradient(startHex: string, endHex: string, steps: number): string[] {
+    const start = hexToRGB(startHex);
+    const end = hexToRGB(endHex);
+
+    const gradient: string[] = [];
+
+    // Calculate and add each color in gradient sequence
+    for (let i = 0; i < steps; i++) {
+        // 1 less than steps gaps
+        const t = i / (steps - 1);
+
+        const r = Math.round(start.r + (end.r - start.r) * t);
+        const g = Math.round(start.g + (end.g - start.g) * t);
+        const b = Math.round(start.b + (end.b - start.b) * t);
+
+        gradient.push(rgbToHex(r, g, b));
+    }
+
+    return gradient;
+}
+
+function addGradient(
+        text: string, font: boolean, fontColor1: string, fontColor2: string,
+        highlight: boolean, highlightColor1: string, highlightColor2: string, highlightTransparency: string,
+        stroke: boolean, strokeColor1: string, strokeColor2: string, strokeThickness: string, strokeTransparency: string, strokeJoins: string, strokeSizing: string
+    ): string {
+
+    let fontGradient: string[] = font ? generateGradient(fontColor1, fontColor2, text.length) : [];
+    let highlightGradient: string[] = highlight ? generateGradient(highlightColor1, highlightColor1, text.length) : [];
+    let strokeGradient: string[] = stroke ? generateGradient(strokeColor1, strokeColor2, text.length) : [];
+
+    let finalText = "";
+    for (let i = 0; i < text.length; i++) {
+        let currentText = text[i];
+
+        // Add chosen font gradient to current character
+        if (fontGradient.length !== 0) {
+            currentText = '<font color=\"' + fontGradient[i] + '\">' + currentText + '</font>';
+        }
+
+        // Add chosen highlight gradient to current character
+        if (highlightGradient.length !== 0) {
+            let startTag = '<mark color=\"' + highlightGradient[i] + '\"'
+            startTag = (highlightTransparency !== "0") ? startTag + ' transparency=\"' + highlightTransparency + '\"' : startTag;
+
+            const endTag = "</mark>";
+
+            currentText = startTag + currentText + endTag;
+        }
+
+        // Add chosen stroke gradient to current character
+        if (strokeGradient.length !== 0) {
+            let startTag = '<stroke color=\"' + strokeGradient[i] + '\"'
+            startTag = (strokeTransparency !== "0") ? startTag + ' transparency=\"' + strokeTransparency + '\"' : startTag;
+            startTag = (strokeJoins !== "miter") ? startTag + ' joins=\"' + strokeJoins + '\"' : startTag;
+            startTag = (strokeSizing !== "fixed") ? startTag + ' sizing=\"' + strokeSizing + '\"' : startTag;
+            startTag += ">";
+
+            const endTag = "</stroke>";
+
+            currentText = startTag + currentText + endTag;
+        }
+
+        finalText += currentText;
+    }
+
+    return finalText;
 }
 
 // Add any font styles selected
@@ -112,11 +198,18 @@ function generateRichText(): string {
     const smallcaps = (miscellaneousCard?.querySelector("#smallcaps-dropdown") as HTMLSelectElement)?.value;
 
     // If gradient color types exist, add them first
-    const colorTypeValues = [highlightColorType, fontColorType, strokeColorType];
+    const colorTypeValues = [fontColorType, highlightColorType, strokeColorType];
 
     if (colorTypeValues.includes("gradient")) {
         const [val1, val2, val3] = colorTypeValues.map(val => val === "gradient");
-        text = addGradient(text, val1, val2, val3);
+        const [colorVal1, colorVal2, colorVal3, colorVal4, colorVal5, colorVal6, colorVal7, colorVal8, colorVal9, colorVal10, colorVal11, colorVal12, colorVal13, colorVal14] = [
+            val1, fontColor1, fontColor2,
+            val2, highlightColor1, highlightColor2, highlightTransparency,
+            val3, strokeColor1, strokeColor2, strokeThickness, strokeTransparency, strokeJoins, strokeSizing
+        ];
+        text = addGradient(
+            text, colorVal1, colorVal2, colorVal3, colorVal4, colorVal5, colorVal6, colorVal7, colorVal8, colorVal9, colorVal10, colorVal11, colorVal12, colorVal13, colorVal14
+        );
     }
 
     // If normal (non-gradient) font style options are being used, add them
