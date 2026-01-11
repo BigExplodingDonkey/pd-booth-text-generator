@@ -42,40 +42,60 @@ function generateGradient(startHex: string, endHex: string, steps: number): stri
     return gradient;
 }
 
+// Check if current character is an invisible character (like newline or return)
+function isInvisible(char: string): boolean {
+    return char === "\n" || char === "\t" || char === "\r";
+}
+
 // Add gradients to the text first
 function addGradient(
-        text: string, font: boolean, fontColor1: string, fontColor2: string,
+        text: string,
+        font: boolean, fontColor1: string, fontColor2: string,
         highlight: boolean, highlightColor1: string, highlightColor2: string, highlightTransparency: string,
         stroke: boolean, strokeColor1: string, strokeColor2: string, strokeThickness: string, strokeTransparency: string, strokeJoins: string, strokeSizing: string
     ): string {
 
-    let fontGradient: string[] = font ? generateGradient(fontColor1, fontColor2, text.length) : [];
+    const textWithoutSpaces = text.replace(/ /g, "");
+
+    let fontGradient: string[] = font ? generateGradient(fontColor1, fontColor2, textWithoutSpaces.length) : [];
     let highlightGradient: string[] = highlight ? generateGradient(highlightColor1, highlightColor2, text.length) : [];
-    let strokeGradient: string[] = stroke ? generateGradient(strokeColor1, strokeColor2, text.length) : [];
+    let strokeGradient: string[] = stroke ? generateGradient(strokeColor1, strokeColor2, textWithoutSpaces.length) : [];
 
     let finalText = "";
-    for (let i = 0; i < text.length; i++) {
-        let currentText = text[i];
 
-        // Add chosen font gradient to current character
-        if (fontGradient.length !== 0) {
-            currentText = '<font color=\"' + fontGradient[i] + '\">' + currentText + '</font>';
+    // Track valid indexes for gradients
+    let fontIndex = 0;
+    let strokeIndex = 0;
+    let highlightIndex = 0;
+
+    // Generate gradient text one character at a time
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+        let currentText = char;
+
+        // Add chosen font gradient to current (non invis) character
+        if (fontGradient.length !== 0 && char !== " " && !isInvisible(char)) {
+            currentText = '<font color=\"' + fontGradient[fontIndex] + '\">' + currentText + '</font>';
+
+            fontIndex++;
         }
 
-        // Add chosen highlight gradient to current character
-        if (highlightGradient.length !== 0) {
-            let startTag = '<mark color=\"' + highlightGradient[i] + '\"'
+        // Add chosen highlight gradient to current (non invis but not non space) character
+        if (highlightGradient.length !== 0 && !isInvisible(char)) {
+            let startTag = '<mark color=\"' + highlightGradient[highlightIndex] + '\"'
             startTag = (highlightTransparency !== "0") ? startTag + ' transparency=\"' + highlightTransparency + '\"' : startTag;
             startTag += ">";
 
             const endTag = "</mark>";
 
             currentText = startTag + currentText + endTag;
+
+            highlightIndex++;
         }
 
-        // Add chosen stroke gradient to current character
-        if (strokeGradient.length !== 0) {
-            let startTag = '<stroke color=\"' + strokeGradient[i] + '\" thickness=\"' + strokeThickness + '\"';
+        // Add chosen stroke gradient to current (non invis) character
+        if (strokeGradient.length !== 0 && char !== " " && !isInvisible(char)) {
+            let startTag = '<stroke color=\"' + strokeGradient[strokeIndex] + '\" thickness=\"' + strokeThickness + '\"';
             startTag = (strokeTransparency !== "0") ? startTag + ' transparency=\"' + strokeTransparency + '\"' : startTag;
             startTag = (strokeJoins !== "miter") ? startTag + ' joins=\"' + strokeJoins + '\"' : startTag;
             startTag = (strokeSizing !== "fixed") ? startTag + ' sizing=\"' + strokeSizing + '\"' : startTag;
@@ -84,6 +104,8 @@ function addGradient(
             const endTag = "</stroke>";
 
             currentText = startTag + currentText + endTag;
+
+            strokeIndex++;
         }
 
         finalText += currentText;
@@ -204,23 +226,18 @@ function generateRichText(): string {
     const colorTypeValues = [fontColorType, highlightColorType, strokeColorType];
 
     if (colorTypeValues.includes("gradient")) {
-        const [val1, val2, val3] = colorTypeValues.map(val => val === "gradient");
-        const [colorVal1, colorVal2, colorVal3, colorVal4, colorVal5, colorVal6, colorVal7, colorVal8, colorVal9, colorVal10, colorVal11, colorVal12, colorVal13, colorVal14] = [
-            val1, fontColor1, fontColor2,
-            val2, highlightColor1, highlightColor2, highlightTransparency,
-            val3, strokeColor1, strokeColor2, strokeThickness, strokeTransparency, strokeJoins, strokeSizing
-        ];
+        const [fontGradientEnabled, highlightGradientEnabled, strokeGradientEnabled] = colorTypeValues.map(val => val === "gradient");
         text = addGradient(
-            text, colorVal1, colorVal2, colorVal3, colorVal4, colorVal5, colorVal6, colorVal7, colorVal8, colorVal9, colorVal10, colorVal11, colorVal12, colorVal13, colorVal14
+            text,
+            fontGradientEnabled, fontColor1, fontColor2,
+            highlightGradientEnabled, highlightColor1, highlightColor2, highlightTransparency,
+            strokeGradientEnabled, strokeColor1, strokeColor2, strokeThickness, strokeTransparency, strokeJoins, strokeSizing
         );
     }
 
     // If normal (non-gradient) font style options are being used, add them
-    const fontValues = [fontColor, useFontSize, fontSize, fontFamily, fontWeight, fontTransparency];
-
     if (fontColorType === "color" || useFontSize === "yes" || fontFamily !== "None" || fontWeight !== "Regular" || fontTransparency !== "0") {
-        const [val1, val2, val3, val4, val5, val6] = fontValues;
-        text = addFontStyle(text, val1, val2, val3, val4, val5, val6);
+        text = addFontStyle(text, fontColor, useFontSize, fontSize, fontFamily, fontWeight, fontTransparency);
     }
 
     // If normal (non-gradient) highlight style options are being used, add them
@@ -232,19 +249,16 @@ function generateRichText(): string {
     }
 
     // If normal (non-gradient) stroke style options are being used, add them
-    const strokeValues = [strokeColor, strokeThickness, strokeTransparency, strokeJoins, strokeSizing];
-
     if (strokeColorType === "color") {
-        const [val1, val2, val3, val4, val5] = strokeValues;
-        text = addStrokeStyle(text, val1, val2, val3, val4, val5);
+        text = addStrokeStyle(text, strokeColor, strokeThickness, strokeTransparency, strokeJoins, strokeSizing);
     }
 
     // If any miscellaneous styles are being used, add them
     const miscellaneousValues = [bold, italic, underline, strikethrough, smallcaps];
 
     if (miscellaneousValues.includes("yes")) {
-        const [val1, val2, val3, val4, val5] = miscellaneousValues.map(val => val === "yes");
-        text = addMiscellaneousStyle(text, val1, val2, val3, val4, val5);
+        const [boldEnabled, italicEnabled, underlineEnabled, strikethroughEnabled, smallcapsEnabled] = miscellaneousValues.map(val => val === "yes");
+        text = addMiscellaneousStyle(text, boldEnabled, italicEnabled, underlineEnabled, strikethroughEnabled, smallcapsEnabled);
     }
 
     return text;
