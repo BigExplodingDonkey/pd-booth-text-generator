@@ -49,7 +49,7 @@ function addGradient(
     ): string {
 
     let fontGradient: string[] = font ? generateGradient(fontColor1, fontColor2, text.length) : [];
-    let highlightGradient: string[] = highlight ? generateGradient(highlightColor1, highlightColor1, text.length) : [];
+    let highlightGradient: string[] = highlight ? generateGradient(highlightColor1, highlightColor2, text.length) : [];
     let strokeGradient: string[] = stroke ? generateGradient(strokeColor1, strokeColor2, text.length) : [];
 
     let finalText = "";
@@ -65,6 +65,7 @@ function addGradient(
         if (highlightGradient.length !== 0) {
             let startTag = '<mark color=\"' + highlightGradient[i] + '\"'
             startTag = (highlightTransparency !== "0") ? startTag + ' transparency=\"' + highlightTransparency + '\"' : startTag;
+            startTag += ">";
 
             const endTag = "</mark>";
 
@@ -73,7 +74,7 @@ function addGradient(
 
         // Add chosen stroke gradient to current character
         if (strokeGradient.length !== 0) {
-            let startTag = '<stroke color=\"' + strokeGradient[i] + '\"'
+            let startTag = '<stroke color=\"' + strokeGradient[i] + '\" thickness=\"' + strokeThickness + '\"';
             startTag = (strokeTransparency !== "0") ? startTag + ' transparency=\"' + strokeTransparency + '\"' : startTag;
             startTag = (strokeJoins !== "miter") ? startTag + ' joins=\"' + strokeJoins + '\"' : startTag;
             startTag = (strokeSizing !== "fixed") ? startTag + ' sizing=\"' + strokeSizing + '\"' : startTag;
@@ -127,7 +128,7 @@ function addHighlightStyle(text: string, color: string, transparency: string): s
 function addStrokeStyle(text: string, color: string, thickness: string, transparency: string, joins: string, sizing: string): string {
     let finalText = text;
 
-    let startTag = '<stroke color=\"' + color + '\"'
+    let startTag = '<stroke color=\"' + color + '\" thickness=\"' + thickness + '\"';
     startTag = (transparency !== "0") ? startTag + ' transparency=\"' + transparency + '\"' : startTag;
     startTag = (joins !== "miter") ? startTag + ' joins=\"' + joins + '\"' : startTag;
     startTag = (sizing !== "fixed") ? startTag + ' sizing=\"' + sizing + '\"' : startTag;
