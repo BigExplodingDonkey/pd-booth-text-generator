@@ -322,6 +322,16 @@ header nav ul li {
     color: #fff;
 }
 
+#modal-text-length {
+    font-size: 0.9rem;          /* slightly smaller than header */
+    color: #0f172a;             /* match text color */
+    display: flex;               /* make it a flex container */
+    justify-content: center;     /* horizontal center */
+    align-items: center;         /* vertical center (optional) */
+    margin-top: 0.25rem;        /* spacing from textarea */
+    margin-bottom: 0.5rem;      /* spacing before buttons */
+}
+
 /* ---------------- INPUT FOCUS ---------------- */
 textarea:focus,
 input:focus,

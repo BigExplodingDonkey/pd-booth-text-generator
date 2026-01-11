@@ -266,7 +266,7 @@ function generateRichText(): string {
 
 // Create generated text popup
 function createRichTextModal(richText: string) {
-    // Create overlay (outside of card container)
+    // Create overlay
     const overlay = document.createElement("div");
     overlay.id = "modal-overlay";
 
@@ -274,42 +274,42 @@ function createRichTextModal(richText: string) {
     const modal = document.createElement("div");
     modal.id = "modal";
 
-    // Create header
+    // Header
     const header = document.createElement("h2");
     header.textContent = "Here's Your Text:";
 
-    // Create textbox (read only)
+    // Textarea (read-only)
     const textarea = document.createElement("textarea");
     textarea.value = richText;
     textarea.readOnly = true;
     textarea.id = "modal-textarea";
 
-    // Create container for buttons
+    // Text length display
+    const textLength = document.createElement("div");
+    textLength.id = "modal-text-length";
+    textLength.textContent = `Text Length: ${richText.length}`;
+
+    // Container for buttons
     const buttons = document.createElement("div");
     buttons.id = "modal-buttons";
 
-    // Create copy text button
+    // Copy button
     const copyBtn = document.createElement("button");
     copyBtn.textContent = "Copy Text";
     copyBtn.className = "modal-btn copy";
     copyBtn.id = "modal-btn-copy";
     copyBtn.onclick = () => {
         textarea.select();
-        if (!navigator.clipboard){
+        if (!navigator.clipboard) {
             document.execCommand("copy");
-        } else{
-            navigator.clipboard.writeText(richText).then(
-                function(){
-                    alert("Text successfully copied to clipboard.");
-                })
-            .catch(
-                function() {
-                    alert("Text could not be copied to clipboard."); // error
-            });
+        } else {
+            navigator.clipboard.writeText(richText)
+                .then(() => alert("Text successfully copied to clipboard."))
+                .catch(() => alert("Text could not be copied to clipboard."));
         }
     };
 
-    // Create close button
+    // Close button
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "Close";
     closeBtn.className = "modal-btn";
@@ -319,8 +319,8 @@ function createRichTextModal(richText: string) {
     // Assemble buttons
     buttons.append(copyBtn, closeBtn);
 
-    // Add contents to page
-    modal.append(header, textarea, buttons);
+    // Assemble modal content
+    modal.append(header, textarea, textLength, buttons);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 }
