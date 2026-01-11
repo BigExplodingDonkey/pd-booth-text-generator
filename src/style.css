@@ -243,8 +243,11 @@ header nav ul li {
     border: 1px solid #7faedc;
     border-radius: 1rem;
     padding: 2rem;
-    min-width: 35rem;
-    max-width: 50rem;
+    width: 90%;
+    min-width: 20rem;
+    max-width: 35rem;
+    max-height: 90vh;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
