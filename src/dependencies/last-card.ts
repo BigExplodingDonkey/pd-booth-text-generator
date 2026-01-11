@@ -96,7 +96,8 @@ function addGradient(
 function addFontStyle(text: string, color: string, useSize: string, size: string, family: string, weight: string, transparency: string): string {
     let finalText = text;
 
-    let startTag = '<font color=\"' + color + '\"'
+    let startTag = '<font';
+    startTag = (color !== undefined && color !== null) ? startTag + ' color=\"' + color + '\"' : startTag;
     startTag = (useSize !== "no") ? startTag + ' size=\"' + size + '\"' : startTag;
     startTag = (family !== "None") ? startTag + ' family=\"' + family + '\"' : startTag;
     startTag = (weight !== "Regular") ? startTag + ' weight=\"' + weight + '\"' : startTag;
