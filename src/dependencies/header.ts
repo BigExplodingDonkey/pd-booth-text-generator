@@ -5,7 +5,7 @@ export function createHeader(): HTMLElement {
     ul.innerHTML = `
     <li><b>PD Booth Text Generator</b></li>
     <li><a href="https://www.discord.gg/VgCjM8agKC">
-        <img src="DiscordIcon.png" alt="Discord" class="nav-icon"> Discord Server
+        <img src="/DiscordIcon.png" class="nav-icon"> Discord Server
     </a></li>
     `;
 
