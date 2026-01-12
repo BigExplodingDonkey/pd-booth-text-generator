@@ -117,7 +117,7 @@ export function createHighlightCard(): HTMLDivElement {
         createOption("gradient", "Gradient")
     ]
     const colorTypeDropdown = createDropdown("color-type-dropdown", options);
-    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown);
+    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown, "Highlight", "The type of color your highlighting has. 'None' adds no highlighting, 'Solid' adds solid color highlighting, and 'Gradient' blends two colors across the highlighting.\n\nKeep in mind that gradients add a lot of length to your text, which can cause it to exceed the booth character limit if your text is too long.");
 
     // Create transparency input
     const transparencyInput = document.createElement("input");
@@ -128,7 +128,7 @@ export function createHighlightCard(): HTMLDivElement {
     transparencyInput.step = "0.1";
     transparencyInput.max = "0.9";
     transparencyInput.defaultValue = "0";
-    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput);
+    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput, "Highlight", "Makes your text highlighting see-through. Use a transparency of 0 for solid highlighting, or a higher number (up to 0.9) to make it more transparent.");
 
     // Add proper contents to the card
     card.appendChild(label);

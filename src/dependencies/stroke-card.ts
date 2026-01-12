@@ -55,13 +55,13 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const colorInput1 = document.createElement("input");
                 colorInput1.type = "color";
                 colorInput1.id = "color-1";
-                const labeledColorInput1 = createLabeledInput("Color 1", colorInput1);
+                const labeledColorInput1 = createLabeledInput("Color 1", colorInput1, "Stroke", "The starting color of your gradient. Your text stroke will begin with this color.");
 
                 // Create color input 2
                 const colorInput2 = document.createElement("input");
                 colorInput2.type = "color";
                 colorInput2.id = "color-2";
-                const labeledColorInput2 = createLabeledInput("Color 2", colorInput2);
+                const labeledColorInput2 = createLabeledInput("Color 2", colorInput2, "Stroke", "The ending color of your gradient. Your text stroke will gradually fade to this color.");
 
                 // Place them in proper spots
                 if (thicknessDiv) {
@@ -117,7 +117,7 @@ export function createStrokeCard(): HTMLDivElement {
         createOption("gradient", "Gradient")
     ]
     const colorTypeDropdown = createDropdown("color-type-dropdown", colorTypeOptions);
-    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown);
+    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown, "Stroke", "The type of color your stroke has. 'None' applies no stroke, 'Solid' applies a single color stroke, and 'Gradient' blends two colors across the text stroke.\n\nKeep in mind that gradients add a lot of length to your text, which can cause it to exceed the booth character limit if your text is too long.");
 
     // Create size input
     const thicknessInput = document.createElement("input");
@@ -138,7 +138,7 @@ export function createStrokeCard(): HTMLDivElement {
     transparencyInput.step = "0.1";
     transparencyInput.max = "0.9";
     transparencyInput.defaultValue = "0";
-    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput);
+    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput, "Stroke", "Makes your stroke see-through. Use a transparency of 0 for solid stroke, or a higher number (up to 0.9) to make it more transparent.");
 
     // Create joins dropdown
     const joinsOptions: HTMLElement[] = [
@@ -147,7 +147,7 @@ export function createStrokeCard(): HTMLDivElement {
         createOption("bevel", "Bevel")
     ];
     const joinsDropdown = createDropdown("joins-dropdown", joinsOptions);
-    const labeledJoinsDropdown = createLabeledInput("Joins", joinsDropdown);
+    const labeledJoinsDropdown = createLabeledInput("Joins", joinsDropdown, "Stroke", "Changes the shape of the corners where the outline lines meet.");
 
     // Create sizing dropdown
     const sizingOptions: HTMLElement[] = [
@@ -155,7 +155,7 @@ export function createStrokeCard(): HTMLDivElement {
         createOption("scaled", "Scaled")
     ];
     const sizingDropdown = createDropdown("sizing-dropdown", sizingOptions);
-    const labeledSizingDropdown = createLabeledInput("Sizing", sizingDropdown);
+    const labeledSizingDropdown = createLabeledInput("Sizing", sizingDropdown, "Stroke", "'Fixed' keeps the stroke thickness exactly what you set. 'Scaled' grows or shrinks based on the text length or booth size.");
 
     // Add contents to the card
     card.appendChild(label);

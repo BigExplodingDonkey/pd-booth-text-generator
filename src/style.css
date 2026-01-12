@@ -288,6 +288,10 @@ li a {
     box-shadow: 0 0.5rem 1.25rem rgba(15,23,42,0.2);
 }
 
+#modal p {
+    white-space: pre-line;
+}
+
 #modal h2 {
     margin: 0;
     text-align: center;
@@ -336,13 +340,14 @@ li a {
 }
 
 #modal-text-length {
-    font-size: 0.9rem;          /* slightly smaller than header */
-    color: #0f172a;             /* match text color */
-    display: flex;               /* make it a flex container */
-    justify-content: center;     /* horizontal center */
-    align-items: center;         /* vertical center (optional) */
-    margin-top: 0.25rem;        /* spacing from textarea */
-    margin-bottom: 0.5rem;      /* spacing before buttons */
+    font-size: 0.9rem;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
 }
 
 /* ---------------- INPUT FOCUS ---------------- */

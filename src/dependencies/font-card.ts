@@ -55,13 +55,13 @@ function setupColorTypeDropdown(dropdown: HTMLSelectElement): void {
                 const colorInput1 = document.createElement("input");
                 colorInput1.type = "color";
                 colorInput1.id = "color-1";
-                const labeledColorInput1 = createLabeledInput("Color 1", colorInput1);
+                const labeledColorInput1 = createLabeledInput("Color 1", colorInput1, "Font", "The starting color of your gradient. Your text will begin with this color.");
 
                 // Create color input 2
                 const colorInput2 = document.createElement("input");
                 colorInput2.type = "color";
                 colorInput2.id = "color-2";
-                const labeledColorInput2 = createLabeledInput("Color 2", colorInput2);
+                const labeledColorInput2 = createLabeledInput("Color 2", colorInput2, "Font", "The ending color of your gradient. Your text will gradually fade to this color.");
 
                 // Place them in proper spots
                 if (sizeCheckDiv) {
@@ -102,7 +102,7 @@ function setupSizeDropdown(dropdown: HTMLSelectElement): void {
                 sizeInput.min = "0";
                 sizeInput.defaultValue = "30";
                 setupNumInput(sizeInput);
-                const labeledSizeInput = createLabeledInput("Size", sizeInput);
+                const labeledSizeInput = createLabeledInput("Size", sizeInput, "Font", "Font size changes how big your letters are. It only matters if you’re combining text with other sizes (including if their size isn’t already set).");
 
                 // Place it in proper spot
                 if (familyInputDiv) {
@@ -157,7 +157,7 @@ export function createFontCard(): HTMLDivElement {
         createOption("gradient", "Gradient")
     ]
     const colorTypeDropdown = createDropdown("color-type-dropdown", colorTypeOptions);
-    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown);
+    const labeledColorTypeDropdown = createLabeledInput("Color Type", colorTypeDropdown, "Font", "The type of color your font has. 'None' leaves it unchanged, 'Solid' applies a single color, and 'Gradient' blends two colors across the text.\n\nKeep in mind that gradients add a lot of length to your text, which can cause it to exceed the booth character limit if your text is too long.");
 
     // Create size checkbox
     const sizeCheckOptions: HTMLElement[] = [
@@ -224,7 +224,7 @@ export function createFontCard(): HTMLDivElement {
         createOption("ArimoBold", "ArimoBold")
     ];
     const familyDropdown = createDropdown("family-dropdown", familyOptions);
-    const labeledFamilyDropdown = createLabeledInput("Family", familyDropdown);
+    const labeledFamilyDropdown = createLabeledInput("Family", familyDropdown, "Font", "A set of letters and numbers that share the same style, like a design theme for your text.");
 
     // Create transparency input
     const transparencyInput = document.createElement("input");
@@ -235,7 +235,7 @@ export function createFontCard(): HTMLDivElement {
     transparencyInput.step = "0.1";
     transparencyInput.max = "0.9";
     transparencyInput.defaultValue = "0";
-    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput);
+    const labeledTransparencyInput = createLabeledInput("Transparency", transparencyInput, "Font", "Makes your text see-through. Use a transparency of 0 for solid text, or a higher number (up to 0.9) to make it more transparent.");
 
     // Create weight dropdown
     const weightOptions: HTMLElement[] = [
@@ -250,7 +250,7 @@ export function createFontCard(): HTMLDivElement {
         createOption("Heavy", "Heavy")
     ];
     const weightDropdown = createDropdown("weight-dropdown", weightOptions);
-    const labeledWeightDropdown = createLabeledInput("Weight", weightDropdown);
+    const labeledWeightDropdown = createLabeledInput("Weight", weightDropdown, "Font", "How thick or thin your letters appear. Choose thin for delicate text or bold for strong, eye-catching text.");
 
     // Add contents to the card
     card.appendChild(label);

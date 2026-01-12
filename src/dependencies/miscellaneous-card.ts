@@ -48,7 +48,7 @@ export function createMiscellaneousCard(): HTMLDivElement {
         createOption("no", "No", true)
     ];
     const smallcapsDropdown = createDropdown("smallcaps-dropdown", smallcapsOptions);
-    const labeledSmallcapsDropdown = createLabeledInput("Smallcaps", smallcapsDropdown);
+    const labeledSmallcapsDropdown = createLabeledInput("Smallcaps", smallcapsDropdown, "Miscellaneous", "Makes your text look uppercase while keeping a size difference between the original capital and lowercase letters.");
 
     // Add contents to the card
     card.appendChild(label);

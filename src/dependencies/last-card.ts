@@ -289,6 +289,18 @@ function createRichTextModal(richText: string) {
     textLength.id = "modal-text-length";
     textLength.textContent = `Text Length: ${richText.length}`;
 
+    // Add a tip if text is too long
+    if (richText.length > 650) {
+        const tip = document.createElement("div");
+        tip.id = "modal-text-tip";
+        tip.style.marginTop = "0.4rem";
+        tip.style.fontSize = "0.9rem";
+        tip.style.color = "#ff5555";
+        tip.style.textAlign = "center";
+        tip.textContent = "⚠️ Your text exceeds the Pls Donate character limit. Try shortening your text, or removing gradients if you have any.";
+        textLength.appendChild(tip);
+    }
+
     // Container for buttons
     const buttons = document.createElement("div");
     buttons.id = "modal-buttons";
